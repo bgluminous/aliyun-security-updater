@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   service0:
-    image: docker.kiiiv.com/luminous/aliyun-security-updater:version #version改成需要的版本号
+    image: luminous/aliyun-security-updater:version #version改成需要的版本号
     pull_policy: always
     container_name: aliyun-security-updater
     restart: on-failure

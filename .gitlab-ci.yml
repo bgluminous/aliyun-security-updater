@@ -43,6 +43,27 @@ build:
     - docker build -t $BASE_REPO_URL/$PROJECT_NAME:$VERSION .
     - docker push $BASE_REPO_URL/$PROJECT_NAME:$VERSION
     - docker rmi $BASE_REPO_URL/$PROJECT_NAME:$VERSION
-  artifacts:
-    reports:
-      dotenv: env.env
+
+build-hub:
+  stage: build
+  tags:
+    - centos
+    - prod
+    - proxy
+    - us-bak
+  only:
+    - /^release-.*$/
+  allow_failure: true
+  script:
+    - echo "开始分析项目元数据~"
+    - VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout)
+    - PROJECT_NAME=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.name -q -DforceStdout)
+    - echo "$VERSION" >> ./src/main/resources/version.info
+    - echo "VERSION=$VERSION" >> env.env
+    - echo "PROJECT_NAME=$PROJECT_NAME" >> env.env
+    - echo "开始编译项目~"
+    - mvn package -Dmaven.test.skip=true
+    - echo "开始打包项目~"
+    - docker build -t bgluminous/$PROJECT_NAME:$VERSION .
+    - docker push bgluminous/$PROJECT_NAME:$VERSION
+    - docker rmi bgluminous/$PROJECT_NAME:$VERSION
