@@ -1,0 +1,27 @@
+# 复制本文件并映射到 Docker 容器的/settings.yml
+# Aliyun A/K
+accessKeyId: XXXXXX
+accessKeySecret: XXXXXXX
+# 执行时间
+cron: 0 0 0,9 * * ?
+# 获取IP的API (需要返回Json会读取data部分作为IP)
+ipApi: https://api.kiiiv.com/v1/openapi/other/ip
+# 更新DNS(可配置多条) endpoint(接入点) domainName(目标域名) rr(主机记录)
+dns:
+  - endpoint: alidns.cn-beijing.aliyuncs.com
+    domainName: demo.com
+    rr: www
+  - endpoint: alidns.cn-beijing.aliyuncs.com
+    domainName: xx.com
+    rr: www1
+# 更新ECS安全组(可配置多条) endpoint(接入点) regionId(区域) securityGroupId(安全组ID) description(访问规则描述)
+ecs:
+  - endpoint: ecs.cn-beijing.aliyuncs.com
+    regionId: cn-beijing
+    securityGroupId: sg-XXXXXXXXX
+    description: demo
+# 更新RDS(可配置多条) endpoint(接入点) dbInstanceId(RDS实例ID) ipArrayName(白名单分组名称)
+rds:
+  - endpoint: rds.cn-beijing.aliyuncs.com
+    dbInstanceId: rm-XXXXXXXXX
+    ipArrayName: ip_connect_demo

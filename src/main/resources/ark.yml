@@ -1,0 +1,4 @@
+arkLog:
+  path: /logs
+  filePrefix: aliyun-security-updater
+  detail: "{INF:TTF}{DEB:TTF}{WAR:TTF}{ERR:TTF}{VER:TTF}{FAL:TTF}"
