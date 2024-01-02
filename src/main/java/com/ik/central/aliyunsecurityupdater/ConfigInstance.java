@@ -18,7 +18,7 @@ public class ConfigInstance {
     try (InputStream is = new FileInputStream("/settings.yml")) {
       Holder.INSTANCE.config = new Yaml().loadAs(is, CustomConfigPojo.class);
     } catch (Exception ex) {
-      throw new ConfigInitError("读取配置文件时错误! 错误信息: %s".formatted(ex.getMessage()));
+      throw new ConfigInitError("读取配置文件时错误（；´д｀）ゞ错误信息: %s".formatted(ex.getMessage()));
     }
   }
 
