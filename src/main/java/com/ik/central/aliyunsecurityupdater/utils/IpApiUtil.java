@@ -47,9 +47,9 @@ public class IpApiUtil {
       });
       resStr = node.get("data");
     } catch (JsonParseException ex) {
-      LOGGER.err(ex, "解析Json错误! 错误信息:%s 原始数据：%s", ex.getMessage(), resStr);
+      LOGGER.err(ex, "解析Json错误（；´д｀）ゞ错误信息:%s 原始数据：%s", ex.getMessage(), resStr);
     } catch (IOException | InterruptedException ex) {
-      LOGGER.err(ex, "从OpenAPI获取IP错误! 错误信息:%s", ex.getMessage());
+      LOGGER.err(ex, "从OpenAPI获取IP错误（；´д｀）ゞ错误信息:%s", ex.getMessage());
       Thread.currentThread().interrupt();
     }
     return resStr;
