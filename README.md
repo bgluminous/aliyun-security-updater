@@ -54,3 +54,9 @@ services:
       - /home/settings.yml:/settings.yml
       - /data/logs/aliyun-security-updater:/logs
 ```
+
+## 更新日志
+
+### 1.1.0
+- 新增 SingletonStorage 用于存储IP缓存信息（节省查询API调用额度）
+- 文档 修改部分日志提示（变得更加浪费存储空间了）

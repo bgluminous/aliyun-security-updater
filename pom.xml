@@ -12,7 +12,7 @@
 
   <groupId>com.ik.central</groupId>
   <artifactId>aliyun-security-updater</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <name>aliyun-security-updater</name>
   <description>aliyun-security-updater</description>
 
@@ -21,6 +21,7 @@
   </properties>
 
   <dependencies>
+    <!--suppress VulnerableLibrariesLocal -->
     <dependency>
       <groupId>com.aliyun</groupId>
       <artifactId>ecs20140526</artifactId>
