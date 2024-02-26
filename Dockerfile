@@ -7,6 +7,4 @@ COPY ./target/*.jar /home/app.jar
 
 VOLUME /home
 
-RUN bash -c 'touch /home/app.jar'
-
 CMD ["java","-jar","/home/app.jar"]
