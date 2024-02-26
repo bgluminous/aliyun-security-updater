@@ -38,7 +38,7 @@ public class CustomConfigPojo {
   }
 
   public Integer getRetryTimes() {
-    return retryTimes == null || retryDelay < 0 ? 0 : retryTimes;
+    return retryTimes == null || retryTimes < 0 ? 0 : retryTimes;
   }
 
   public Integer getRetryDelay() {
