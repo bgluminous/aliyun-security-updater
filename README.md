@@ -13,9 +13,16 @@
 accessKeyId: XXXXXX
 accessKeySecret: XXXXXXX
 # 执行时间
-cron: 0 0 0,9 * * ?
-# 获取IP的API (需要返回Json会读取data部分作为IP)
+cron: "*/30 * * * * ?"
+# 获取IP的API (默认值 https://api.kiiiv.com/v1/openapi/other/ip) (需要返回Json默认会读取data部分作为IP)
 ipApi: https://api.kiiiv.com/v1/openapi/other/ip
+# 获取IP的API返回IP的Json节点名 (默认值 data) (最低版本1.2.0) 
+responseJsonIpNodeName: "data"
+# 重试次数 (默认值 0) (最低版本1.2.0)
+retryTimes: 3
+# 重试间隔(秒) （默认值 10） (最低版本1.2.0)
+retryDelay: 5
+
 # 更新DNS(可配置多条) endpoint(接入点) domainName(目标域名) rr(主机记录)
 dns:
   - endpoint: alidns.cn-beijing.aliyuncs.com
@@ -44,7 +51,7 @@ version: "3.7"
 
 services:
   service0:
-    image: docker.kiiiv.com/luminous/aliyun-security-updater:latest
+    image: luminous/aliyun-security-updater:latest
     pull_policy: always
     container_name: aliyun-security-updater
     restart: on-failure
@@ -60,3 +67,10 @@ services:
 ### 1.1.0
 - 新增 SingletonStorage 用于存储IP缓存信息（节省查询API调用额度）
 - 文档 修改部分日志提示（变得更加浪费存储空间了）
+
+### 1.2.0
+- 新增 获取IP重试次数和间隔时间配置
+- 新增 获取IP返回Json节点名配置
+- 新增 一些配置项的默认参数
+- 修复 修复获取IPAPI返回Json错误时的错误提示
+- 优化 一些日志的等级

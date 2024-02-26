@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Objects;
 
 @Service
@@ -33,10 +34,39 @@ public class ScheduledService implements SchedulingConfigurer {
     taskRegistrar.addCronTask(this::update, config.getCron());
   }
 
+  @SuppressWarnings("java:S3776")
   private void update() {
-    String ip = IpApiUtil.getIp();
+    int times = 0;
+    int retryTimes = config.getRetryTimes();
+    String ip = null;
+    // 尝试多次获取IP
+    while (times <= retryTimes && ip == null) {
+      if (times != 0) {
+        LOGGER.war("第 %s 次尝试重新获取IP...".formatted(times));
+      }
+      try {
+        ip = IpApiUtil.getIp();
+      } catch (IOException ex) {
+        LOGGER.err("从OpenAPI获取IP错误（；´д｀）ゞ错误信息:%s", ex.getMessage());
+      } catch (InterruptedException ex) {
+        LOGGER.err("发送请求错误（；´д｀）ゞ错误信息:%s", ex.getMessage());
+        Thread.currentThread().interrupt();
+      } finally {
+        times++;
+      }
+      // 如果没有获取到IP才需要延迟执行
+      if (ip == null && times < retryTimes) {
+        LOGGER.war("获取IP地址失败! %s秒后重试...", config.getRetryDelay());
+        try {
+          Thread.sleep(config.getRetryDelay() * 1000L);
+        } catch (InterruptedException ex) {
+          Thread.currentThread().interrupt();
+        }
+      }
+    }
     // 如果没获取到IP，则不更新 (错误信息已经在上层抛出)
-    if (Objects.equals(ip, "null")) {
+    if (ip == null) {
+      LOGGER.err("无法获取IP地址, 请检查日志获取更多信息!");
       return;
     }
     // 比较缓存(节省查询API额度)
@@ -45,7 +75,7 @@ public class ScheduledService implements SchedulingConfigurer {
       LOGGER.inf("IP与缓存比较无变化！跳过任务(～￣▽￣)～");
       return;
     }
-
+    // 更新数据
     updateDomainDNSService.update(config.getDns(), ip);
     updateECSSecurityService.update(config.getEcs(), ip);
     updateRDSSecurityService.update(config.getRds(), ip);
